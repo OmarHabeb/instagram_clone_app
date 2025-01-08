@@ -26,3 +26,8 @@ final class LogOutLoadingState extends AuthState {}
 final class LogOutSuccessState extends AuthState {}
 
 final class LogOutFailedState extends AuthState {}
+/////////////////////////////////////////////////////////
+ final class PickImageLoadingState extends AuthState {}
+final class PickImageSuccessState extends AuthState {}
+final class PickImageFaildState extends AuthState {} 
+

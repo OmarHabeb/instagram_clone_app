@@ -6,7 +6,8 @@ import 'package:instagram_clone_app/controller/auth/auth_cubit.dart';
 import 'package:instagram_clone_app/core/helpers/navigation_helper.dart';
 import 'package:instagram_clone_app/core/style/widgets/text_field_widget.dart';
 import 'package:instagram_clone_app/view/auth/sign_up_screen.dart';
-import 'package:instagram_clone_app/view/home/home_screen.dart';
+import 'package:instagram_clone_app/view/home/home/home_screen.dart';
+import 'package:instagram_clone_app/view/home/navigation_bar_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
@@ -69,7 +70,7 @@ class SignInScreen extends StatelessWidget {
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
                   if (state is LoginSuccessState) {
-                    NavigationHelper.goOffAll(context, HomeScreen());
+                    NavigationHelper.goOffAll(context, NavigationBarScreeen());
                   }
                   else if (state is LoginFailedState) {
                     print("error");

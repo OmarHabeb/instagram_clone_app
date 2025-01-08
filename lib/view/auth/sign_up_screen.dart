@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_clone_app/controller/auth/auth_cubit.dart';
 import 'package:instagram_clone_app/core/helpers/navigation_helper.dart';
@@ -7,11 +8,9 @@ import 'package:instagram_clone_app/view/auth/sign_in_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     var cubit = AuthCubit.get(context);
@@ -19,9 +18,10 @@ class SignUpScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(15.r),
+          padding: EdgeInsets.only(right: 20.w, left: 20.w , 
+          top:250.h),
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+         
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -33,6 +33,55 @@ class SignUpScreen extends StatelessWidget {
                     image: DecorationImage(
                         image: AssetImage('assets/instagram text logo.png'),
                         fit: BoxFit.fill)),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+                    if (state is PickImageLoadingState) {
+                      return CircularProgressIndicator();
+                    } else if (state is PickImageSuccessState) {
+                      return Container(
+                        height: 80.h,
+                        width: 80.w,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: FileImage(cubit.imageFile!),
+                                fit: BoxFit.fill)),
+                      );
+                    } else {
+                      return Container(
+                        width: 80.w,
+                        height: 80.h,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: AssetImage('assets/profile.jpg'),
+                                fit: BoxFit.fill)),
+                      );
+                    }
+                  }),
+                  Positioned(
+                    bottom: -18,
+                    right: 13,
+                    child: Center(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.add_circle,
+                          color: Colors.blue,
+                          size: 30.r,
+                        ),
+                        onPressed: () {
+                          cubit.pickUserImage();
+                        },
+                      ),
+                    ),
+                  )
+                ],
               ),
               SizedBox(
                 height: 20.h,
@@ -85,7 +134,8 @@ class SignUpScreen extends StatelessWidget {
                       .register(
                           email: emailController.text,
                           password: passwordController.text,
-                          name: nameController.text)
+                          name: nameController.text,
+                          imageFile: cubit.imageFile!)
                       .then((onValue) {
                     NavigationHelper.goTo(context, SignInScreen());
                   });
