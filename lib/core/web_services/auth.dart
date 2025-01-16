@@ -27,7 +27,7 @@ class AuthWebService {
       password: password,
     )
         .then((value) {
-          setUserProfilepic(imageFile: imageFile, userId: value.user!.uid.toString());
+      setUserProfilepic(imageFile: imageFile, userId: value.user!.uid.toString());
       setUser(
         id: value.user!.uid,
         name: name,
@@ -60,8 +60,10 @@ void setUser({
 
 Future setUserProfilepic(
     {required File imageFile,
-    required String userId}) async {
+    required String userId})async {
 
-  final path = "$userId/prfile/$userId";
+  final path = "$userId/profile/$userId";
   await Supabase.instance.client.storage.from('user image').upload(path, imageFile);
+  
 }
+

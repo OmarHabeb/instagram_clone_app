@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_clone_app/controller/auth/auth_cubit.dart';
+import 'package:instagram_clone_app/controller/home/home_cubit.dart';
 import 'package:instagram_clone_app/core/network/global/dio_helper.dart';
 import 'package:instagram_clone_app/core/network/local/shared_preference.dart';
 import 'package:instagram_clone_app/core/services/services_locator.dart';
@@ -36,6 +37,11 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => sl<AuthCubit>(),
+         
+        ),
+        BlocProvider(
+          create: (context) => sl<HomeCubit>(),
+         
         ),
       ],
       child: ScreenUtilInit(
@@ -45,8 +51,19 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          theme: ThemeData(
-            brightness: Brightness.dark,
+          theme: ThemeData.dark().copyWith(
+            primaryColor: Colors.white,
+            scaffoldBackgroundColor: Colors.black,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.black,
+              elevation: 0,
+              iconTheme: IconThemeData(color: Colors.white),
+              titleTextStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           home: CacheHelper.getData(key: "uId") != null
               ? NavigationBarScreeen()

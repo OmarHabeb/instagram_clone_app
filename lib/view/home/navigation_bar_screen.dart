@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_clone_app/controller/auth/auth_cubit.dart';
+import 'package:instagram_clone_app/controller/home/home_cubit.dart';
 import 'package:instagram_clone_app/view/home/home/home_screen.dart';
-import 'package:instagram_clone_app/view/home/home/profile_screen.dart';
-import 'package:instagram_clone_app/view/home/home/reals_screen.dart';
-import 'package:instagram_clone_app/view/home/home/search_screen.dart';
-import 'package:instagram_clone_app/view/home/home/shopping_screen.dart';
+import 'package:instagram_clone_app/view/home/profile/profile_screen.dart';
+import 'package:instagram_clone_app/view/home/reals/reals_screen.dart';
+import 'package:instagram_clone_app/view/home/search/search_screen.dart';
+import 'package:instagram_clone_app/view/home/shopping/shopping_screen.dart';
 
 class NavigationBarScreeen extends StatelessWidget {
   const NavigationBarScreeen({super.key});
@@ -14,7 +15,8 @@ class NavigationBarScreeen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ValueNotifier<int> indexn = ValueNotifier<int>(0);
 
-    var cubit = AuthCubit.get(context);
+    var cubit = HomeCubit.get(context);
+    var cubit2 = AuthCubit.get(context);
     final _pageController = PageController();
 
     List<Widget> screens = [
@@ -29,13 +31,14 @@ class NavigationBarScreeen extends StatelessWidget {
         valueListenable: indexn,
         builder: (context, index, child) {
           return BottomNavigationBar(
+              backgroundColor: Colors.black,
               onTap: (value) {
                 indexn.value = value;
                 _pageController.jumpToPage(value);
               },
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: Colors.black,
-              unselectedItemColor: Colors.grey,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white,
               currentIndex: index,
               items: [
                 BottomNavigationBarItem(
@@ -56,7 +59,7 @@ class NavigationBarScreeen extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage(cubit.pathProfileImage()),
+                          image: NetworkImage(cubit.getUserImage().toString()),
                           fit: BoxFit.cover,
                         ),
                       ),

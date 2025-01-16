@@ -71,36 +71,31 @@ class SignInScreen extends StatelessWidget {
                 listener: (context, state) {
                   if (state is LoginSuccessState) {
                     NavigationHelper.goOffAll(context, NavigationBarScreeen());
-                  }
-                  else if (state is LoginFailedState) {
+                  } else if (state is LoginFailedState) {
                     print("error");
                   }
                 },
-                child:  InkWell(
-                onTap: () {
-                
-                  cubit
-                      .login(
-                          email: emailController.text,
-                          password: passwordController.text);
-                   
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Center(
-                    child: Text(
-                      'Sign In',
-                      style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                child: InkWell(
+                  onTap: () {
+                    cubit.login(
+                        email: emailController.text,
+                        password: passwordController.text);
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Center(
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                      ),
                     ),
                   ),
                 ),
               ),
-              ),
-             
               SizedBox(
                 height: 20.h,
               ),

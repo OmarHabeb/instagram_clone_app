@@ -66,20 +66,8 @@ class AuthCubit extends Cubit<AuthState> {
   Future pickUserImage() async {
     emit(PickImageLoadingState());
     image = await _picker.pickImage(source: ImageSource.gallery);
-    // if (image != null) {
     imageFile = File(image!.path);
-    // }
     emit(PickImageSuccessState());
   }
 
-  pathProfileImage() {
-    return Supabase.instance.client.storage
-        .from('user image')
-        .getPublicUrl('${CacheHelper.getData(
-          key: "uId",
-        )}/prfile/${CacheHelper.getData(
-          key: "uId",
-        )}')
-        .toString();
-  }
 }
