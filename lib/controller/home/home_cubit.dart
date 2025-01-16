@@ -8,6 +8,7 @@ import 'package:instagram_clone_app/core/network/local/shared_preference.dart';
 import 'package:instagram_clone_app/core/repository/home.dart';
 import 'package:instagram_clone_app/model/auth/user_model.dart';
 import 'package:meta/meta.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -25,16 +26,20 @@ class HomeCubit extends Cubit<HomeState> {
     return homeRepository.getProfileImage(userId: userId());
   }
 
-  getUserPosts() {
+  getUserPosts() async {
     emit(GetUserPostsLoadingState());
-    homeRepository.getPostsImages(userId: userId()).then((onValue) {
-      Posts = onValue;
-      emit(GetUserPostsSuccessState());
-    }).catchError((onError) {
-      emit(GetUserPostsFiledState());
-      log(onError);
-    });
+    final String path = "${userId()}/posts";
+    var data = await homeRepository.getPostsImages(userId: userId());
+    for (var file in data) {
+      final url = Supabase.instance.client.storage
+          .from('user image')
+          .getPublicUrl('$path/${file.name}');
+      Posts.add(url);
+    }
+    log(Posts.toString());
+    emit(GetUserPostsSuccessState());
   }
+
 
   getUserData() {
     emit(GetUserDataLoadingState());

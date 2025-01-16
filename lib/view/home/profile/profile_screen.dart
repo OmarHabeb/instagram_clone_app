@@ -123,12 +123,12 @@ class ProfileScreen extends StatelessWidget {
               ),
               BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
-                  cubit.getUserPosts();
+                 
                   if (state is GetUserPostsLoadingState) {
                     return CircularProgressIndicator();
                   }
                   if (state is GetUserPostsFiledState) {
-                    return Text('No posts found');
+                    return Text('No posts found ${cubit.Posts.length}');
                   }
                   return GridView.builder(
                     shrinkWrap: true,
@@ -138,13 +138,14 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisCount: 3,
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 5,
-                        childAspectRatio: 100 / 150),
+                        childAspectRatio: 120 / 140),
                     itemBuilder: (context, index) {
                       return Container(
-                        height: 100,
+                       
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(cubit.Posts[index]))),
+                                image: NetworkImage(
+                                    cubit.Posts[index]),fit: BoxFit.cover)),
                       );
                     },
                   );

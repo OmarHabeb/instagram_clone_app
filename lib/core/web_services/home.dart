@@ -23,12 +23,20 @@ class HomeWebService {
   await Supabase.instance.client.storage.from('user image').update(path, imageFile);
   
 }
+Future addPost(
+    {required File  imageFile,
+    required String userId , required String name , required String description}) async {
+
+  final path = "$userId/posts/$name";
+  await Supabase.instance.client.storage.from('user image').upload(path, imageFile);
+  
+}
 
 
  getUserPostsImages({required String userId}) {
-    final String path = "$userId/posts/";
+    final String path = "$userId/posts";
     return Supabase.instance.client.storage
         .from('user image')
-        .getPublicUrl(path);
+        .list(path: path);
   }
 }
