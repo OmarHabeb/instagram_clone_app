@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:instagram_clone_app/controller/home/home_cubit.dart';
-
-import 'package:instagram_clone_app/view/home/profile/profile_field.dart';
+import 'package:instagram_clone_app/view/home/profile/edit_profile/profile_field.dart';
 
 class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({super.key});
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _websiteController = TextEditingController();
@@ -51,7 +50,7 @@ class EditProfileScreen extends StatelessWidget {
                             .updateUserData(
                                 name: _nameController.text,
                                 email: _emailController.text,
-                                image: cubit.imageFile)
+                                image: cubit.imageProfileFile)
                             .then((onValue) {
                           cubit.getUserData();
                         });
@@ -75,7 +74,7 @@ class EditProfileScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            image: FileImage(cubit.imageFile!),
+                            image: FileImage(cubit.imageProfileFile!),
                             fit: BoxFit.fill)),
                   );
                 } else {

@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
          
         ),
         BlocProvider(
-          create: (context) => sl<HomeCubit>()..getUserPosts(),
+          create: (context) => sl<HomeCubit>()..getUserData()..getUserPosts(),
          
         ),
       ],

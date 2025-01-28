@@ -22,6 +22,8 @@ class HomeCubit extends Cubit<HomeState> {
     return CacheHelper.getData(key: "uId");
   }
 
+////////////////////////////////////////
+///get user data
   getUserImage() {
     return homeRepository.getProfileImage(userId: userId());
   }
@@ -40,7 +42,6 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetUserPostsSuccessState());
   }
 
-
   getUserData() {
     emit(GetUserDataLoadingState());
     homeRepository.getUserData(userId: userId()).then((value) {
@@ -52,17 +53,34 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   ////////////////////////////////
+  ///set user profile 
   final ImagePicker _picker = ImagePicker();
-  XFile? image;
-  File? imageFile;
+  XFile? imageProfilePath;
+  File? imageProfileFile;
   Future pickUserImage() async {
     emit(PickImageLoadingState());
-    image = await _picker.pickImage(source: ImageSource.gallery);
-    imageFile = File(image!.path);
+    imageProfilePath = await _picker.pickImage(source: ImageSource.gallery);
+    imageProfileFile = File(imageProfilePath!.path);
     emit(PickImageSuccessState());
   }
-  /////////////////////////////////
 
+  /////////////////////////////////
+  ///uploade post 
+  XFile? imagePostPath;
+  File? imagePostFile;
+  Future pickUserPost() async {
+    emit(PickPostLoadingState());
+    imagePostPath = await _picker.pickImage(source: ImageSource.gallery);
+    imagePostFile = File(imagePostPath!.path);
+    emit(PickPostuccessState());
+  }
+  uploadPost() {
+    emit(UploadPostLoadingState());
+    homeRepository.addPost(userId: userId(), imageFile: imagePostFile!);
+    emit(UploadPostSuccessState());
+  }
+////////////////////////////////////////////////////////////////////////
+//// update user data
   Future updateUserData({name, email, File? image}) async {
     emit(UpdateUserDataLoading());
     UserModel userModel = UserModel(

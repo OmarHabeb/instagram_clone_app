@@ -1,12 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_clone_app/controller/home/home_cubit.dart';
 import 'package:instagram_clone_app/core/helpers/navigation_helper.dart';
 import 'package:instagram_clone_app/core/style/widgets/story_icon.dart';
-import 'package:instagram_clone_app/view/home/profile/edit_profile_screen.dart';
+import 'package:instagram_clone_app/view/home/profile/edit_profile/edit_profile_screen.dart';
+import 'package:instagram_clone_app/view/home/profile/page_widget.dart';
+import 'package:instagram_clone_app/view/home/profile/upload_post_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = HomeCubit.get(context);
-    cubit.getUserData();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -41,7 +41,9 @@ class ProfileScreen extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            NavigationHelper.goTo(context, Post());
+                          },
                           icon: Icon(Icons.my_library_add_sharp)),
                       IconButton(onPressed: () {}, icon: Icon(Icons.menu))
                     ],
@@ -56,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          Text('0'),
+                          Text(cubit.Posts.length.toString()),
                           Text('Posts'),
                         ],
                       ),
@@ -121,36 +123,10 @@ class ProfileScreen extends StatelessWidget {
                       child: Icon(Icons.arrow_drop_down))
                 ],
               ),
-              BlocBuilder<HomeCubit, HomeState>(
-                builder: (context, state) {
-                 
-                  if (state is GetUserPostsLoadingState) {
-                    return CircularProgressIndicator();
-                  }
-                  if (state is GetUserPostsFiledState) {
-                    return Text('No posts found ${cubit.Posts.length}');
-                  }
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: cubit.Posts.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 5,
-                        childAspectRatio: 120 / 140),
-                    itemBuilder: (context, index) {
-                      return Container(
-                       
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    cubit.Posts[index]),fit: BoxFit.cover)),
-                      );
-                    },
-                  );
-                },
-              )
+              SizedBox(
+                height: 20.h,
+              ),
+              PageWidget()
             ],
           ),
         ),

@@ -28,13 +28,10 @@ class HomeRepository {
 
   addPost(
       {required String userId,
-      required String name,
-      required File imageFile,
-      required String description}) async {
+      required File imageFile}) async {
     return homeWebService.addPost(
         imageFile: imageFile,
         userId: userId,
-        name: name,
-        description: description);
+      );
   }
 }

@@ -25,9 +25,9 @@ class HomeWebService {
 }
 Future addPost(
     {required File  imageFile,
-    required String userId , required String name , required String description}) async {
+    required String userId,}) async {
 
-  final path = "$userId/posts/$name";
+  final path = "$userId/posts/${userId}_${DateTime.now()}";
   await Supabase.instance.client.storage.from('user image').upload(path, imageFile);
   
 }
