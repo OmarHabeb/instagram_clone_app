@@ -23,15 +23,16 @@ class HomeRepository {
   }
 
   getPostsImages({required String userId}) {
-    return homeWebService.getUserPostsImages(userId: userId);
+    return homeWebService.getUserPosts(userId: userId);
   }
 
   addPost(
       {required String userId,
-      required File imageFile}) async {
+      required File imageFile , required String caption ,required DateTime?  createdAt }) async {
     return homeWebService.addPost(
         imageFile: imageFile,
-        userId: userId,
+        userId: userId, caption: caption, createdAt: createdAt,
+        
       );
   }
 }

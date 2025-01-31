@@ -54,33 +54,37 @@ class ProfileScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   StoryIcon(image: cubit.getUserImage().toString()),
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Text(cubit.Posts.length.toString()),
-                          Text('Posts'),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Column(
-                        children: [
-                          Text('0'),
-                          Text('Followers'),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Column(
-                        children: [
-                          Text('0'),
-                          Text('Following'),
-                        ],
-                      )
-                    ],
+                  BlocBuilder<HomeCubit,HomeState>(
+                    builder: (context, state) {
+                      return Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(cubit.userModel.posts.toString()),
+                                            Text('Posts'),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(cubit.userModel.followers.toString()),
+                                            Text('Followers'),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(cubit.userModel.following.toString()),
+                                            Text('Following'),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                    },
                   )
                 ],
               ),

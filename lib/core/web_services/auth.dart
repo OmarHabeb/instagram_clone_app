@@ -15,6 +15,9 @@ class AuthWebService {
     );
     return user.user!.uid;
   }
+   getUserProfileImage({required String userId}) {
+    
+  }
 
   Future register(
       {required emailOrPhoneNumber,
@@ -28,10 +31,15 @@ class AuthWebService {
     )
         .then((value) {
       setUserProfilepic(imageFile: imageFile, userId: value.user!.uid.toString());
+
+     final String path = "${value.user!.uid}/profile/${value.user!.uid}";
+      var image  =Supabase.instance.client.storage
+        .from('user image')
+        .getPublicUrl(path);
       setUser(
         id: value.user!.uid,
         name: name,
-        email: emailOrPhoneNumber,
+        email: emailOrPhoneNumber, userProfileImage: image,
       );
     }).catchError((onError) {
       print(onError);
@@ -49,11 +57,14 @@ void setUser({
   required String id,
   required String name,
   required String email,
+  required String userProfileImage,
+
 }) {
   UserModel userModel = UserModel(
     id: id,
     name: name,
     email: email,
+    userProfileImage: userProfileImage
   );
   FirebaseFirestore.instance.collection('User').doc(id).set(userModel.toJson());
 }

@@ -33,7 +33,7 @@ final class GetUserPostsFiledState extends HomeState {}
 ///////////////////////////////////////////////////
 final class PickPostLoadingState extends HomeState {}
 
-final class PickPostuccessState extends HomeState {}
+final class PickPostSuccessState extends HomeState {}
 /////////////////////////////////////////////////////
 final class UploadPostLoadingState extends HomeState {}
 final class UploadPostSuccessState extends HomeState {}

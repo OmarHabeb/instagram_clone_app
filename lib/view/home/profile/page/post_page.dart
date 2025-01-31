@@ -29,7 +29,7 @@ class PostPage extends StatelessWidget {
                       return Container(
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(cubit.Posts[index]),
+                                image: NetworkImage(cubit.Posts[index].imageUrl.toString()),
                                 fit: BoxFit.cover)),
                       );
                     },

@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone_app/core/network/local/shared_preference.dart';
 import 'package:instagram_clone_app/core/repository/home.dart';
 import 'package:instagram_clone_app/model/auth/user_model.dart';
+import 'package:instagram_clone_app/model/home/post_model.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 part 'home_state.dart';
@@ -17,27 +18,24 @@ class HomeCubit extends Cubit<HomeState> {
 
   static HomeCubit get(context) => BlocProvider.of(context);
   UserModel userModel = UserModel();
-  List<String> Posts = [];
+  List  Posts = [];
   userId() {
     return CacheHelper.getData(key: "uId");
   }
 
 ////////////////////////////////////////
-///get user data
+  ///get user data
   getUserImage() {
     return homeRepository.getProfileImage(userId: userId());
   }
 
   getUserPosts() async {
     emit(GetUserPostsLoadingState());
-    final String path = "${userId()}/posts";
+    // final String path = "${userId()}/posts";
     var data = await homeRepository.getPostsImages(userId: userId());
-    for (var file in data) {
-      final url = Supabase.instance.client.storage
-          .from('user image')
-          .getPublicUrl('$path/${file.name}');
-      Posts.add(url);
-    }
+     Posts = data.docs.map((doc) {
+      return PostModel.formJson(doc.data());
+    }).toList();
     log(Posts.toString());
     emit(GetUserPostsSuccessState());
   }
@@ -53,7 +51,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   ////////////////////////////////
-  ///set user profile 
+  ///set user profile
   final ImagePicker _picker = ImagePicker();
   XFile? imageProfilePath;
   File? imageProfileFile;
@@ -65,20 +63,26 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   /////////////////////////////////
-  ///uploade post 
+  ///uploade post
   XFile? imagePostPath;
   File? imagePostFile;
   Future pickUserPost() async {
     emit(PickPostLoadingState());
     imagePostPath = await _picker.pickImage(source: ImageSource.gallery);
     imagePostFile = File(imagePostPath!.path);
-    emit(PickPostuccessState());
+    emit(PickPostSuccessState());
   }
-  uploadPost() {
+
+  Future uploadPost({required String caption})async {
     emit(UploadPostLoadingState());
-    homeRepository.addPost(userId: userId(), imageFile: imagePostFile!);
+    await homeRepository.addPost(
+        userId: userId(),
+        imageFile: imagePostFile!,
+        caption: caption,
+        createdAt: DateTime.now());
     emit(UploadPostSuccessState());
   }
+
 ////////////////////////////////////////////////////////////////////////
 //// update user data
   Future updateUserData({name, email, File? image}) async {
@@ -102,5 +106,26 @@ class HomeCubit extends Cubit<HomeState> {
       emit(UpdateUserDataFailed());
       print(Error);
     });
+  }
+
+
+  ///////////////////////////////
+  
+XFile? realPostPath;
+  File? realPostFile;
+  Future pickUserreal() async {
+    emit(PickPostLoadingState());
+    imagePostPath = await _picker.pickMedia();
+    imagePostFile = File(imagePostPath!.path);
+    emit(PickPostSuccessState());
+  }
+
+  Future addreal({
+    required File imageFile,
+  }) async {
+    final path = "$userId/real/${userId}_${DateTime.now()}";
+    await Supabase.instance.client.storage
+        .from('user image')
+        .upload(path, imageFile);
   }
 }
